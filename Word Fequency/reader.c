@@ -7,13 +7,18 @@
 
 #include "reader.h"
 
+#define READER_PROLOG(pread, newvar)                    \
+    assert(pread);                                      \
+    Reader_data* (newvar) = (Reader_data*) (pread + 1);
+
 
 enum {BUF_SIZE = 64};
 
 typedef struct Reader_data
 {
-    FILE* file;
-    char* buf;
+    FILE*  file;
+    char*  buf;
+    size_t size;
 } Reader_data;
 
 char* reader_getword(Reader* rd);
@@ -31,7 +36,8 @@ Reader* reader()
 
     Reader_data* rdt = (Reader_data*) (newrd + 1);
 
-    rdt->buf = (char*) calloc(BUF_SIZE, sizeof(char));
+    rdt->buf = (char*) malloc(BUF_SIZE);
+    rdt->size = BUF_SIZE;
     rdt->file = stdin;
 
     return newrd;
@@ -40,10 +46,9 @@ Reader* reader()
 
 void reader_init(Reader* rd, char* filename)
 {
-    assert(rd);
-    Reader_data* rdt = (Reader_data*) (rd + 1);
+    READER_PROLOG(rd, rdt);
 
-    if (rdt->file != stdin)
+    if (rdt->file && rdt->file != stdin)
         fclose(rdt->file);
 
     rdt->file = fopen(filename, "r");
@@ -57,8 +62,7 @@ void reader_init(Reader* rd, char* filename)
 
 char* reader_getword(Reader* rd)
 {
-    assert(rd);
-    Reader_data* rdt = (Reader_data*) (rd + 1);
+    READER_PROLOG(rd, rdt);
 
     if (rdt->file == NULL)
         return NULL;
@@ -68,8 +72,13 @@ char* reader_getword(Reader* rd)
     if (c == EOF)
         return NULL;
 
-    while (isalpha(c) && i < BUF_SIZE - 1)
+    while (isalpha(c))
     {
+        if (i == rdt->size - 1)
+        {
+            rdt->size *= 2;
+            rdt->buf = (char*) realloc(rdt->buf, rdt->size);
+        }
         rdt->buf[i] = (char) c;
         c = fgetc(rdt->file);
         i++;
@@ -82,8 +91,7 @@ char* reader_getword(Reader* rd)
 
 void reader_destroy(Reader* rd)
 {
-    assert(rd);
-    Reader_data* rdt = (Reader_data*) (rd + 1);
+    READER_PROLOG(rd, rdt);
  
     if (rdt->file != stdin && rdt->file != NULL)
         fclose(rdt->file);

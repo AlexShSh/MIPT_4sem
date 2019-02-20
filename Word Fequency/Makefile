@@ -1,19 +1,20 @@
-CFLAG =-c -Wall -g
+CFLAGS =-c -Wall -g
+CC = gcc 
+TARGET = wf
 
-all: wf
+all: $(TARGET)
 
-wf: wf.o reader.o dict.o
-	gcc wf.o reader.o dict.o -o wf
+$(TARGET): wf.o reader.o dict.o
+	$(CC) $^ -o $@
 
 wf.o: wf.c
-	gcc $(CFLAG) wf.c
+	$(CC) $(CFLAGS) $^
 
 reader.o: reader.c
-	gcc $(CFLAG) reader.c
+	$(CC) $(CFLAGS) $^
 
 dict.o: dict.c
-	gcc $(CFLAG) dict.c
-
+	$(CC) $(CFLAGS) $^
 
 clean:
 	rm -f *.o wf

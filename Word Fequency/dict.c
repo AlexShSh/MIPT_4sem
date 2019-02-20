@@ -5,6 +5,10 @@
 
 #include "dict.h"
 
+#define DICT_PROLOG(pdict, newvar)                    \
+    assert(pdict);                                    \
+    Dict_list* newvar = *((Dict_list**) (pdict + 1));
+
 
 typedef struct Dict_list
 {
@@ -39,9 +43,8 @@ Dict* dict()
 
 void dict_addword(Dict* dr, char* wd)
 {
-    assert(dr);
+    DICT_PROLOG(dr, dls);
     assert(wd);
-    Dict_list* dls = *((Dict_list**) (dr + 1));
 
     Dict_list* cur = dict_find(dls, wd);
 
@@ -76,6 +79,7 @@ Dict_list* dict_find(Dict_list* dls, char* wd)
 void dict_add(Dict* dr, char* wd)
 {
     assert(wd);
+    assert(dr);
     Dict_list** dls = (Dict_list**) (dr + 1);
 
     Dict_list* newdls = (Dict_list*) malloc(sizeof(Dict_list));
@@ -104,9 +108,8 @@ void dict_add(Dict* dr, char* wd)
 
 void dict_print(Dict* dr)
 {
-    assert(dr);
-    Dict_list* dls = *((Dict_list**) (dr + 1));
-
+    DICT_PROLOG(dr, dls);
+    
     while (dls)
     {
         printf("%d : '%s'\n", dls->freq, dls->word);
@@ -117,8 +120,7 @@ void dict_print(Dict* dr)
 
 void dict_destroy(Dict* dr)
 {
-    assert(dr);
-    Dict_list* dls = *((Dict_list**) (dr + 1));
+    DICT_PROLOG(dr, dls);
 
     while (dls)
     {
