@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <string.h>
 
 #include "dict.h"
+#include "word.h"
 
 #define DICT_PROLOG(pdict, newvar)                    \
     assert(pdict);                                    \
@@ -12,8 +12,7 @@
 
 typedef struct Dict_list
 {
-    char*             word;
-    int               freq;
+    Word* word;
     struct Dict_list* next;    
 } Dict_list;
 
@@ -41,32 +40,32 @@ Dict* dict()
 }
 
 
-void dict_addword(Dict* dr, char* wd)
+void dict_addword(Dict* dr, char* str)
 {
     DICT_PROLOG(dr, dls);
-    assert(wd);
+    assert(str);
 
-    Dict_list* cur = dict_find(dls, wd);
+    Dict_list* cur = dict_find(dls, str);
 
     if (cur == NULL)
     {
-        dict_add(dr, wd);
+        dict_add(dr, str);
     }
     else
     {
-        cur->freq++;
+        cur->word->inc(cur->word);
     }
 }
 
 
-Dict_list* dict_find(Dict_list* dls, char* wd)
+Dict_list* dict_find(Dict_list* dls, char* str)
 {
-    assert(wd);
+    assert(str);
 
     Dict_list* cur = dls;
     while (cur)
     {
-        if (!strcmp(cur->word, wd))
+        if (cur->word->isequal(cur->word, str))
             break;
 
         cur = cur->next;
@@ -76,21 +75,16 @@ Dict_list* dict_find(Dict_list* dls, char* wd)
 }
 
 
-void dict_add(Dict* dr, char* wd)
+void dict_add(Dict* dr, char* str)
 {
-    assert(wd);
+    assert(str);
     assert(dr);
     Dict_list** dls = (Dict_list**) (dr + 1);
 
     Dict_list* newdls = (Dict_list*) malloc(sizeof(Dict_list));
     assert(newdls);
 
-    int len = strlen(wd);
-    char* buf = (char*) malloc(len + 1);
-    strcpy(buf, wd);
-
-    newdls->word = buf;
-    newdls->freq = 1;
+    newdls->word = word(str);
     newdls->next = NULL;
 
     if (*dls == NULL)
@@ -112,7 +106,8 @@ void dict_print(Dict* dr)
     
     while (dls)
     {
-        printf("%d : '%s'\n", dls->freq, dls->word);
+        dls->word->print(dls->word);
+        printf("\n");
         dls = dls->next;
     }
 }
@@ -124,7 +119,7 @@ void dict_destroy(Dict* dr)
 
     while (dls)
     {
-        free(dls->word);
+        dls->word->destroy(dls->word);
         Dict_list* tmp = dls->next;
         free(dls);
         dls = tmp;

@@ -1,20 +1,15 @@
-CFLAGS =-c -Wall -g
-CC = gcc 
-TARGET = wf
+CFLAGS += -Wall -g
+PROG = wf
+OBJ = wf.o reader.o dict.o word.o
+HDR = reader.h dict.h word.h
 
-all: $(TARGET)
+all: $(PROG)
 
-$(TARGET): wf.o reader.o dict.o
+$(PROG): $(OBJ)
 	$(CC) $^ -o $@
 
-wf.o: wf.c
-	$(CC) $(CFLAGS) $^
-
-reader.o: reader.c
-	$(CC) $(CFLAGS) $^
-
-dict.o: dict.c
-	$(CC) $(CFLAGS) $^
+$(OBJ): $(HDR)
 
 clean:
-	rm -f *.o wf
+	$(RM) *.o $(PROG)
+    
