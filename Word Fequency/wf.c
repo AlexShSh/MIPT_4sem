@@ -1,11 +1,12 @@
 #include "reader.h"
 #include "dict.h"
+#include "tree.h"
 
 
 int main(int argc, char* argv[])
 {
     Reader* rd = reader();
-    Dict* dr = dict();
+    Dict* dr = DICT();
 
     if (argc != 1)
         rd->init(rd, argv[1]);

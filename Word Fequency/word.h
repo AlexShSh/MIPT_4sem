@@ -10,5 +10,6 @@ typedef struct Word
 } Word;
 
 Word* word(char* str);
+int   word_cmp(Word* a, Word* b);
 
 #endif

@@ -41,6 +41,15 @@ Word* word(char* str)
 }
 
 
+int word_cmp(Word* a, Word* b)
+{
+    WORD_PROLOG(a, w1);
+    WORD_PROLOG(b, w2);
+    
+    return strcmp(w1->data, w2->data);
+}
+
+
 int  word_isequal(Word* wd, char* str)
 {
     assert(str);
