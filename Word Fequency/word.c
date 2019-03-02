@@ -16,21 +16,23 @@ typedef struct Word_data
     int   freq;
 } Word_data;
 
-int  word_isequal(Word* wd, char* str);
+int  word_isequal(Word* wd, const char* str);
+int  word_frequency(Word* wd);
 void word_inc(Word* wd);
 void word_print(Word* wd);
 void word_destroy(Word* wd);
 
 
-Word* word(char* str)
+Word* word(const char* str)
 {
     Word* wd = (Word*) malloc(sizeof(Word) + sizeof(Word_data));
     WORD_PROLOG(wd, wdt);
 
-    wd->isequal = word_isequal;
-    wd->inc     = word_inc;
-    wd->print   = word_print;
-    wd->destroy = word_destroy;
+    wd->isequal   = word_isequal;
+    wd->frequency = word_frequency;
+    wd->inc       = word_inc;
+    wd->print     = word_print;
+    wd->destroy   = word_destroy;
 
     size_t len = strlen(str);
     wdt->data = (char*) malloc(len + 1);
@@ -50,7 +52,15 @@ int word_cmp(Word* a, Word* b)
 }
 
 
-int  word_isequal(Word* wd, char* str)
+int word_frequency(Word* wd)
+{
+    WORD_PROLOG(wd, wdt);
+
+    return wdt->freq;
+}
+
+
+int  word_isequal(Word* wd, const char* str)
 {
     assert(str);
     WORD_PROLOG(wd, wdt);

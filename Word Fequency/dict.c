@@ -16,12 +16,14 @@ typedef struct Dict_list
     struct Dict_list* next;    
 } Dict_list;
 
-void dict_addword(Dict* dr, char* wd);
+void dict_addword(Dict* dr, const char* wd);
 void dict_print(Dict* dr);
+int  dict_frequency(Dict* dr, const char* str);
+int  dict_size(Dict* dr);
 void dict_destroy(Dict* dr);
 
-Dict_list* dict_find(Dict_list* dls, char* wd);
-void       dict_add(Dict* dr, char* wd);
+Dict_list* dict_find(Dict_list* dls, const char* wd);
+void       dict_add(Dict* dr, const char* wd);
 
 
 Dict* dict()
@@ -29,9 +31,11 @@ Dict* dict()
     Dict* newdr = (Dict*) malloc(sizeof(Dict) + sizeof(Dict_list*));
     assert(newdr);
 
-    newdr->addword = dict_addword;
-    newdr->print   = dict_print;
-    newdr->destroy = dict_destroy;
+    newdr->addword   = dict_addword;
+    newdr->print     = dict_print;
+    newdr->frequency = dict_frequency;
+    newdr->size      = dict_size;
+    newdr->destroy   = dict_destroy;
 
     Dict_list** dls = (Dict_list**) (newdr + 1);
     *dls = NULL;
@@ -40,7 +44,7 @@ Dict* dict()
 }
 
 
-void dict_addword(Dict* dr, char* str)
+void dict_addword(Dict* dr, const char* str)
 {
     DICT_PROLOG(dr, dls);
     assert(str);
@@ -58,7 +62,7 @@ void dict_addword(Dict* dr, char* str)
 }
 
 
-Dict_list* dict_find(Dict_list* dls, char* str)
+Dict_list* dict_find(Dict_list* dls, const char* str)
 {
     assert(str);
 
@@ -75,7 +79,7 @@ Dict_list* dict_find(Dict_list* dls, char* str)
 }
 
 
-void dict_add(Dict* dr, char* str)
+void dict_add(Dict* dr, const char* str)
 {
     assert(str);
     assert(dr);
@@ -110,6 +114,33 @@ void dict_print(Dict* dr)
         printf("\n");
         dls = dls->next;
     }
+}
+
+
+int dict_frequency(Dict* dr, const char* str)
+{
+    DICT_PROLOG(dr, dls);
+
+    Dict_list* fnd = dict_find(dls, str);
+    if (!fnd)
+        return 0;
+    else
+        return fnd->word->frequency(fnd->word);
+}
+
+
+int dict_size(Dict* dr)
+{
+    DICT_PROLOG(dr, dls);
+
+    int size = 0;
+    while (dls)
+    {
+        size++;
+        dls = dls->next;
+    }
+
+    return size;
 }
 
 

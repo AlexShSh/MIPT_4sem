@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "reader.h"
 #include "dict.h"
 #include "tree.h"

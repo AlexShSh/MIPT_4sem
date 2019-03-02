@@ -18,6 +18,7 @@ typedef struct Tree
 
 Tree* tree(void* val, int (*compare)(void* a, void* b));
 Tree* tree_find(Tree* root, void* val);
+int   tree_size(Tree* root);
 void  tree_addElem(Tree* root, void* val);
 void  tree_print(Tree* root, void (*printer)(void*));
 void  tree_destroy(Tree* root, void (*data_destroy)(void*));
@@ -59,6 +60,23 @@ Tree* tree_find(Tree* root, void* val)
     }
         
     return NULL;
+}
+
+
+int tree_size(Tree* root)
+{
+    if (!root)
+        return 0;
+
+    int size = 1;
+    
+    if (root->left)
+        size += tree_size(root->left);
+
+    if (root->right)
+        size += tree_size(root->right);
+
+    return size;
 }
 
 
@@ -118,8 +136,10 @@ void tree_destroy(Tree* root, void (*data_destroy)(void*))
     Tree* newvar = *((Tree**) (pdict + 1));
 
 
-void tree_dict_addword(Dict* dr, char* wd);
+void tree_dict_addword(Dict* dr, const char* wd);
 void tree_dict_print(Dict* dr);
+int  tree_dict_frequency(Dict* dr, const char* str);
+int  tree_dict_size(Dict* dr);
 void tree_dict_destroy(Dict* dr);
 
 int  compare(void* a, void* b);
@@ -132,9 +152,11 @@ Dict* tree_dict()
     Dict* dr = (Dict*) malloc(sizeof(Dict) + sizeof(Tree*));
     assert(dr);
 
-    dr->addword = tree_dict_addword;
-    dr->print   = tree_dict_print;
-    dr->destroy = tree_dict_destroy;
+    dr->addword   = tree_dict_addword;
+    dr->print     = tree_dict_print;
+    dr->frequency = tree_dict_frequency;
+    dr->size      = tree_dict_size;
+    dr->destroy   = tree_dict_destroy;
 
     Tree** ptree = (Tree**) (dr + 1);
     *ptree = NULL;
@@ -143,7 +165,7 @@ Dict* tree_dict()
 }
 
 
-void tree_dict_addword(Dict* dr, char* str)
+void tree_dict_addword(Dict* dr, const char* str)
 {
     assert(dr);
     Tree** ptree = (Tree**) (dr + 1);
@@ -178,6 +200,33 @@ void tree_dict_print(Dict* dr)
     TREE_DICT_PROLOG(dr, tr);
     
     tree_print(tr, printer);
+}
+
+
+int tree_dict_frequency(Dict* dr, const char* str)
+{
+    TREE_DICT_PROLOG(dr, tr);
+
+    Word* wd = word(str);
+    Tree* res = tree_find(tr, wd);
+    int fr = 0;
+
+    if (res)
+    {
+        Word* fnd = (Word*) res->data;
+        fr = fnd->frequency(fnd);
+    }
+    wd->destroy(wd);
+
+    return fr;
+}
+
+
+int tree_dict_size(Dict* dr)
+{
+    TREE_DICT_PROLOG(dr, tr);
+
+    return tree_size(tr);
 }
 
 

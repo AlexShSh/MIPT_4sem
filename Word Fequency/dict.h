@@ -3,8 +3,10 @@
 
 typedef struct Dict
 {
-    void (*addword)(struct Dict* dr, char* wd);
+    void (*addword)(struct Dict* dr, const char* wd);
     void (*print)(struct Dict* dr);
+    int  (*frequency)(struct Dict* dr, const char* wd);
+    int  (*size)(struct Dict* dr);
     void (*destroy)(struct Dict* dr);
 } Dict;
 
