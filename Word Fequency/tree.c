@@ -6,6 +6,10 @@
 #include "word.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Tree
 {
     void*        data;
@@ -22,7 +26,6 @@ int   tree_size(Tree* root);
 void  tree_addElem(Tree* root, void* val);
 void  tree_print(Tree* root, void (*printer)(void*));
 void  tree_destroy(Tree* root, void (*data_destroy)(void*));
-
 
 Tree* tree(void* val, int (*compare)(void* a, void* b))
 {
@@ -142,9 +145,9 @@ int  tree_dict_frequency(Dict* dr, const char* str);
 int  tree_dict_size(Dict* dr);
 void tree_dict_destroy(Dict* dr);
 
-int  compare(void* a, void* b);
-void printer(void* dt);
-void data_destroy(void* dt);
+static int  compare(void* a, void* b);
+static void printer(void* dt);
+static void data_destroy(void* dt);
 
 
 Dict* tree_dict()
@@ -240,7 +243,7 @@ void tree_dict_destroy(Dict* dr)
 }
 
 
-int compare(void* a, void* b)
+static int compare(void* a, void* b)
 {
     Word* w1 = (Word*) a;
     Word* w2 = (Word*) b;
@@ -249,7 +252,7 @@ int compare(void* a, void* b)
 }
 
 
-void printer(void* dt)
+static void printer(void* dt)
 {
     Word* wd = (Word*) dt;
     wd->print(wd);
@@ -257,9 +260,12 @@ void printer(void* dt)
 }
 
 
-void data_destroy(void* dt)
+static void data_destroy(void* dt)
 {
     Word* wd = (Word*) dt;
     wd->destroy(wd);   
 }
 
+#ifdef __cplusplus
+}
+#endif

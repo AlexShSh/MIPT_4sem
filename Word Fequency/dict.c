@@ -22,8 +22,8 @@ int  dict_frequency(Dict* dr, const char* str);
 int  dict_size(Dict* dr);
 void dict_destroy(Dict* dr);
 
-Dict_list* dict_find(Dict_list* dls, const char* wd);
-void       dict_add(Dict* dr, const char* wd);
+static Dict_list* dict_find(Dict_list* dls, const char* wd);
+static void       dict_add(Dict* dr, const char* wd);
 
 
 Dict* dict()
@@ -62,7 +62,7 @@ void dict_addword(Dict* dr, const char* str)
 }
 
 
-Dict_list* dict_find(Dict_list* dls, const char* str)
+static Dict_list* dict_find(Dict_list* dls, const char* str)
 {
     assert(str);
 
@@ -79,7 +79,7 @@ Dict_list* dict_find(Dict_list* dls, const char* str)
 }
 
 
-void dict_add(Dict* dr, const char* str)
+static void dict_add(Dict* dr, const char* str)
 {
     assert(str);
     assert(dr);

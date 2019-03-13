@@ -27,6 +27,9 @@ int main(int argc, char* argv[])
 
     dr->print(dr);
 
+    printf("size: %d\n", dr->size(dr));
+    printf("alex freq: %d\n", dr->frequency(dr, "alex"));
+
     rd->destroy(rd);
     dr->destroy(dr);
 
