@@ -1,19 +1,24 @@
 #pragma once
 
 #include "keypressable.h"
+#include "game.h"
 
 class View
 {
 public:
-    void virtual draw() = 0;
-    void virtual run()  = 0;
-    virtual ~View()     = 0; 
-    void setonkey(Keypressable* k);
+    virtual void draw() = 0;
+    virtual void run() = 0;
+    virtual void snakepainter(Coord c, Dir d) = 0;
+    virtual ~View() = 0; 
+
+    void set_onkey(Keypressable* k);
+    void set_model(Game* g);
 
     static View* get();
 
 protected:
     Keypressable* onkey_delegate;
+    Game*         game;
 
 private:
     static View* inst;

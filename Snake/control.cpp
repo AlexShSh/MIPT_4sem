@@ -7,11 +7,11 @@
 CHuman::CHuman()
 {
     View* v = View::get();
-    v->setonkey(this);
+    v->set_onkey(this);
 }
 
 
 void CHuman::onkey(const int key)
 {
-    printf("key: %c\n", (char) key);
+    printf("key: %c", (char) key);
 }   

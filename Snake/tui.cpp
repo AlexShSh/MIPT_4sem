@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <iostream>
 #include <signal.h>
+#include <functional>
+using namespace std::placeholders; 
 
 #include "tui.h"
 
@@ -85,6 +87,10 @@ void Tui::draw()
     draw_vline(col - 1, 3, row - 6);
     gotoxy(col/2, row - 2);
     printf("AlexShSh, 2019");
+
+    SnakePainter f = std::bind(&View::snakepainter, this, _1, _2);
+    game->paint(f);
+
     fflush(stdout);
 }
 
@@ -105,11 +111,18 @@ void Tui::run()
 }
 
 
+void Tui::snakepainter(Coord c, Dir d)
+{
+    gotoxy(c.first, c.second);
+    putchar("^v<>o"[d]);
+}
+
+
 Tui::~Tui()
 {
     clear_screen();
     gotoxy(col/2, 1);
-    printf("Goodbuy\n");
+    printf("Goodbuy\n\r");
     tcsetattr(0, TCSAFLUSH, &old_at);
 }
 

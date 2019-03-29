@@ -17,7 +17,13 @@ View* View::get()
 }
 
 
-void View::setonkey(Keypressable* k)
+void View::set_onkey(Keypressable* k)
 {
     onkey_delegate = k;
+}
+
+
+void View::set_model(Game* g)
+{
+    game = g;
 }

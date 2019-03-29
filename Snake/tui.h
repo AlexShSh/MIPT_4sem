@@ -10,6 +10,7 @@ public:
     Tui();
     void draw();
     void run();
+    void snakepainter(Coord, Dir);
     ~Tui();
 
 private:
