@@ -1,5 +1,7 @@
 #pragma once
 
+#include <termios.h>
+
 #include "view.h"
 
 class Tui : public View
@@ -13,10 +15,11 @@ public:
 private:
     int col;
     int row;
+    struct termios old_at;
 
     void get_winsize();
-    void gotoxy(int x, int y);
-    void draw_hline(int x, int y, int size);
-    void draw_vline(int x, int y, int size);
+    void gotoxy(const int x, const int y);
+    void draw_hline(const int x, const int y, const int size);
+    void draw_vline(const int x, const int y, const int size);
     void clear_screen();
 };
