@@ -6,8 +6,12 @@
 int main()
 {
     View* v = View::get();
-    Control* hum = new CHuman();
-    Game* game = new Game();
+
+    auto s = new Snake();
+    auto h = new CHuman(s);
+    auto g = new Game();
+    g->add(s);
+
     v->draw();
     v->run();
     delete v;

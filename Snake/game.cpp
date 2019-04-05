@@ -1,13 +1,13 @@
 #include "game.h"
 #include "view.h"
 
-void Game::paint(SnakePainter p)
+void Game::visit(SnakePainter p)
 {
     bool f = true;
-    for (const auto& s : snakes)
-        for (const auto& c : s.body)
+    for (auto s : snakes)
+        for (const auto& c : s->body)
         {
-            p(c, f ? s.dir : BODY);
+            p(c, f ? s->dir : BODY);
             f = false;
         }
 }
@@ -17,8 +17,12 @@ Game::Game()
 {
     View* v = View::get();
     v->set_model(this);
+}
 
-    snakes.push_back(Snake());
+
+void Game::add(Snake* s)
+{
+    snakes.push_back(s);
 }
 
 
@@ -32,3 +36,24 @@ Snake::Snake()
     body.push_back(Coord(15,10));
     dir = LEFT;
 }
+
+
+Snake::Snake(const Snake& s):
+    body(s.body), dir(s.dir)
+{}
+
+
+Snake& Snake::operator=(const Snake& s)
+{
+    dir = s.dir;
+    body = s.body;
+
+    return *this;
+}
+
+
+void Snake::set_dir(Dir d)
+{
+    dir = d;
+}
+

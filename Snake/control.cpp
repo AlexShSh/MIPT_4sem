@@ -4,7 +4,14 @@
 #include "view.h"
 
 
-CHuman::CHuman()
+Control::Control(Snake* s)
+{
+    model = s;    
+}
+
+
+
+CHuman::CHuman(Snake* s) : Control(s)
 {
     View* v = View::get();
     v->set_onkey(this);
@@ -13,5 +20,23 @@ CHuman::CHuman()
 
 void CHuman::onkey(const int key)
 {
-    printf("key: %c", (char) key);
-}   
+    switch (key)
+    {
+        case 'w':
+            model->set_dir(UP);
+            break;
+        case 'a':
+            model->set_dir(LEFT);
+            break;
+        case 'd':
+            model->set_dir(RIGHT);
+            break;
+        case 's':
+            model->set_dir(DOWN);
+            break;
+        default:
+            break;
+    }
+    View* v = View::get();
+    v->draw();
+}

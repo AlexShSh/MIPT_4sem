@@ -21,6 +21,10 @@ class Snake
 {
 public:
     Snake();
+    Snake(const Snake&);
+
+    Snake& operator=(const Snake&);
+    void set_dir(Dir d);
 
     std::list<Coord> body;
     Dir dir;
@@ -37,9 +41,11 @@ class Game
 {
 public:
     Game();
-    void paint(SnakePainter);
+    void add(Snake*);
+    void visit(SnakePainter);
 
 private:
-    std::list<Snake>  snakes;
+    std::list<Snake*>  snakes;
     std::list<Rabbit> rabbits;
 };
+

@@ -89,7 +89,7 @@ void Tui::draw()
     printf("AlexShSh, 2019");
 
     SnakePainter f = std::bind(&View::snakepainter, this, _1, _2);
-    game->paint(f);
+    game->visit(f);
 
     fflush(stdout);
 }

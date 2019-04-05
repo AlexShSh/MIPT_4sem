@@ -1,7 +1,7 @@
 #pragma once
 
-#include "keypressable.h"
 #include "game.h"
+#include "keypressable.h"
 
 class View
 {
