@@ -25,6 +25,7 @@ public:
 
     Snake& operator=(const Snake&);
     void set_dir(Dir d);
+    void move();
 
     std::list<Coord> body;
     Dir dir;
@@ -43,6 +44,7 @@ public:
     Game();
     void add(Snake*);
     void visit(SnakePainter);
+    void move();
 
 private:
     std::list<Snake*>  snakes;

@@ -8,8 +8,8 @@ int main()
     View* v = View::get();
 
     auto s = new Snake();
-    auto h = new CHuman(s);
     auto g = new Game();
+    auto h = new CHuman(s, g);
     g->add(s);
 
     v->draw();

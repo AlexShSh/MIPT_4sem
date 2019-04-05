@@ -4,14 +4,14 @@
 #include "view.h"
 
 
-Control::Control(Snake* s)
+Control::Control(Snake* s, Game* g)
 {
-    model = s;    
+    model = s;
+    game = g;
 }
 
 
-
-CHuman::CHuman(Snake* s) : Control(s)
+CHuman::CHuman(Snake* s, Game* g) : Control(s, g)
 {
     View* v = View::get();
     v->set_onkey(this);
@@ -37,6 +37,7 @@ void CHuman::onkey(const int key)
         default:
             break;
     }
+    game->move();
     View* v = View::get();
     v->draw();
 }
