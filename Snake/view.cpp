@@ -27,3 +27,9 @@ void View::set_model(Game* g)
 {
     game = g;
 }
+
+
+void View::set_ontimer(int timeout, timer_fn fn)
+{
+    timer = {timeout, fn};
+}

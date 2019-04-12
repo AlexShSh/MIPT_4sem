@@ -24,3 +24,4 @@ private:
     void draw_vline(const int x, const int y, const int size);
     void clear_screen();
 };
+

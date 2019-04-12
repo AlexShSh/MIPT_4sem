@@ -37,7 +37,4 @@ void CHuman::onkey(const int key)
         default:
             break;
     }
-    game->move();
-    View* v = View::get();
-    v->draw();
 }

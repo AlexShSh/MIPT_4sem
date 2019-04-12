@@ -1,3 +1,5 @@
+#include <functional>
+
 #include "game.h"
 #include "view.h"
 
@@ -6,6 +8,7 @@ Game::Game()
 {
     View* v = View::get();
     v->set_model(this);
+    v->set_ontimer(500, std::bind(&Game::move, this));
 }
 
 

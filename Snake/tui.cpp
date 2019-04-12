@@ -4,6 +4,7 @@
 #include <iostream>
 #include <signal.h>
 #include <functional>
+#include <poll.h>
 using namespace std::placeholders; 
 
 #include "tui.h"
@@ -91,6 +92,7 @@ void Tui::draw()
     SnakePainter f = std::bind(&View::snakepainter, this, _1, _2);
     game->visit(f);
 
+    gotoxy(0, 0);
     fflush(stdout);
 }
 
@@ -100,13 +102,40 @@ void Tui::run()
     if (!onkey_delegate)
         return;
 
-    int key = -1;
-    while ((key = getchar()))
+    int time_delay = 0;
+    while (1)
     {
-        if (key == -1 || key == 'q')
-            break;
+        struct timespec start_tp;
+        clock_gettime(CLOCK_REALTIME, &start_tp);
 
-        onkey_delegate->onkey(key);
+        struct pollfd fds;
+        fds.fd = STDIN_FILENO;
+        fds.events = POLLIN;    
+        int res = poll(&fds, 1, timer.first - time_delay);
+        if (res > 0)
+        {
+            char sym;
+            read(STDIN_FILENO, &sym, 1);
+            if (sym == 'q')
+                return;
+
+            onkey_delegate->onkey(sym);
+
+            struct timespec end_tp;
+            clock_gettime(CLOCK_REALTIME, &end_tp);
+            time_delay = (end_tp.tv_sec - start_tp.tv_sec) * 1000 + 
+                         (end_tp.tv_nsec - start_tp.tv_nsec) / 1000000;
+        }
+        else if (res == 0)
+        {
+            timer.second();
+            draw();
+            time_delay = 0;
+        }
+        else
+        {
+            //error
+        }
     }
 }
 
