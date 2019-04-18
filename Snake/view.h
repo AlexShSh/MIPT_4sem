@@ -13,6 +13,7 @@ public:
     virtual void draw() = 0;
     virtual void run() = 0;
     virtual void snakepainter(Coord c, Dir d) = 0;
+    virtual void rabbitpainter(Coord c) = 0;
     virtual ~View() = 0; 
 
     void set_onkey(Keypressable* k);

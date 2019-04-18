@@ -7,10 +7,13 @@ int main()
 {
     View* v = View::get();
 
-    auto s = new Snake();
-    auto g = new Game();
-    auto h = new CHuman(s, g);
-    g->add(s);
+    Snake s;
+    Game g;
+    CHuman h(&s, &g);
+    Rabbit r1(20, 20), r2(20, 30);
+    g.add(&s);
+    g.add(&r1);
+    g.add(&r2);
 
     v->draw();
     v->run();

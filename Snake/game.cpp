@@ -12,15 +12,23 @@ Game::Game()
 }
 
 
-void Game::visit(SnakePainter p)
+void Game::visit(SnakePainter sp, RabbitPainter rp)
 {
     bool f = true;
     for (auto s : snakes)
-        for (const auto& c : s->body)
+    {
+        auto body = s->get_body();
+        Dir dir = s->get_dir();
+        for (const auto& c : body)
         {
-            p(c, f ? s->dir : BODY);
+            sp(c, f ? dir : BODY);
             f = false;
         }
+    }
+    for (auto r : rabbits)
+    {
+        rp(*r);
+    }
 }
 
 
@@ -30,11 +38,17 @@ void Game::add(Snake* s)
 }
 
 
+void Game::add(Rabbit* r)
+{
+    rabbits.push_back(r);
+}
+
+
 void Game::move()
 {
     for (auto s : snakes)
     {
-        s->move();
+        s->move(rabbits);
     }
 }
 
@@ -71,7 +85,19 @@ void Snake::set_dir(Dir d)
 }
 
 
-void Snake::move()
+Dir Snake::get_dir()
+{
+    return dir;
+}
+
+
+std::list<Coord>& Snake::get_body()
+{
+    return body;
+}
+
+
+void Snake::move(std::list<Rabbit*>& rabbits)
 {
     auto head = body.front();
     switch (this->dir)
@@ -92,6 +118,17 @@ void Snake::move()
             break;
     }
     body.push_front(head);
-    body.pop_back();
+
+    bool onrab = false;
+    for (auto r = rabbits.begin(); r != rabbits.end(); r++)
+        if (head == **r)
+        {
+            rabbits.erase(r);
+            onrab = true;
+            break;
+        }
+
+    if (!onrab)
+        body.pop_back();
 }
 

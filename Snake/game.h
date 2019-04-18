@@ -17,6 +17,9 @@ enum Dir
 };
 
 
+using Rabbit = Coord;
+
+
 class Snake
 {
 public:
@@ -25,29 +28,31 @@ public:
 
     Snake& operator=(const Snake&);
     void set_dir(Dir d);
-    void move();
+    void move(std::list<Rabbit*>& rabbits);
+    Dir get_dir();
+    std::list<Coord>& get_body();
 
+private:
     std::list<Coord> body;
     Dir dir;
 };
 
 
-using Rabbit = Coord;
-
-
-using SnakePainter = std::function<void (Coord, Dir)>;
+using SnakePainter  = std::function<void (Coord, Dir)>;
+using RabbitPainter = std::function<void(Coord)>;
 
 
 class Game
 {
 public:
     Game();
-    void add(Snake*);
-    void visit(SnakePainter);
+    void add(Snake* s);
+    void add(Rabbit* r);
+    void visit(SnakePainter sp, RabbitPainter rp);
     void move();
 
 private:
     std::list<Snake*>  snakes;
-    std::list<Rabbit> rabbits;
+    std::list<Rabbit*> rabbits;
 };
 

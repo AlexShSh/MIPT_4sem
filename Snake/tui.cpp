@@ -89,8 +89,9 @@ void Tui::draw()
     gotoxy(col/2, row - 2);
     printf("AlexShSh, 2019");
 
-    SnakePainter f = std::bind(&View::snakepainter, this, _1, _2);
-    game->visit(f);
+    SnakePainter  sp = std::bind(&View::snakepainter, this, _1, _2);
+    RabbitPainter rp = std::bind(&View::rabbitpainter, this, _1);
+    game->visit(sp, rp);
 
     gotoxy(0, 0);
     fflush(stdout);
@@ -144,6 +145,12 @@ void Tui::snakepainter(Coord c, Dir d)
 {
     gotoxy(c.first, c.second);
     putchar("^v<>o"[d]);
+}
+
+void Tui::rabbitpainter(Coord c)
+{
+    gotoxy(c.first, c.second);
+    putchar('@');
 }
 
 

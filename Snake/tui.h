@@ -10,7 +10,8 @@ public:
     Tui();
     void draw();
     void run();
-    void snakepainter(Coord, Dir);
+    void snakepainter(Coord c, Dir d);
+    void rabbitpainter(Coord c);
     ~Tui();
 
 private:
