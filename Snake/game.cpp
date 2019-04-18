@@ -1,4 +1,6 @@
 #include <functional>
+#include <iostream>
+#include <ctime>
 
 #include "game.h"
 #include "view.h"
@@ -8,7 +10,11 @@ Game::Game()
 {
     View* v = View::get();
     v->set_model(this);
-    v->set_ontimer(500, std::bind(&Game::move, this));
+    v->set_ontimer(350, std::bind(&Game::update, this));
+
+    srand(time(0));
+    spawn_rabbit();
+    spawn_rabbit();
 }
 
 
@@ -50,6 +56,23 @@ void Game::move()
     {
         s->move(rabbits);
     }
+}
+
+
+void Game::spawn_rabbit()
+{
+    int x = 5 + rand() % 100;
+    int y = 5 + rand() % 30;
+    Rabbit* r = new Rabbit(x, y);
+    rabbits.push_back(r);  
+}
+
+
+void Game::update()
+{
+    move();
+    if (rabbits.size() < 1 || (rabbits.size() <= RABBITS_MAX && rand() % 10 == 1))
+        spawn_rabbit();
 }
 
 

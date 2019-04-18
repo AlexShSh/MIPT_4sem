@@ -16,6 +16,7 @@ enum Dir
     BODY
 };
 
+enum {RABBITS_MAX = 10};
 
 using Rabbit = Coord;
 
@@ -49,7 +50,9 @@ public:
     void add(Snake* s);
     void add(Rabbit* r);
     void visit(SnakePainter sp, RabbitPainter rp);
+    void update();
     void move();
+    void spawn_rabbit();
 
 private:
     std::list<Snake*>  snakes;
